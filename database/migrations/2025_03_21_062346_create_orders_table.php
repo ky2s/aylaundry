@@ -24,6 +24,8 @@ return new class extends Migration
             $table->boolean('pickup')->default(false);
             $table->boolean('delivery')->default(false);
             $table->timestamp('completed_at')->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable()->after('created_at');
         });
     }
 

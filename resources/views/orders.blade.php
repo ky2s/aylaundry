@@ -9,7 +9,7 @@
                 <th>ID</th>
                 <th>Customer</th>
                 <th>Order Date</th>
-                <th>Total Weight (kg)</th>
+                <th>Weight (kg)</th>
                 <th>Total Price</th>
                 <th>Status</th>
                 <th>Pickup</th>
@@ -21,7 +21,7 @@
         <tbody>
             @foreach($orders as $order)
             <tr>
-                <td>{{ $order->id }}</td>
+                <td><a href="{{url('/orders/show/'.$order->id)}}">{{ $order->id }}</a></td>
                 <td>{{ optional($order->customer)->name ?? 'Unknown Customer' }}</td>
                 <td>{{ $order->order_date }}</td>
                 <td>{{ $order->total_weight ?? '-' }}</td>

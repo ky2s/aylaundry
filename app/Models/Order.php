@@ -13,6 +13,17 @@ class Order extends Model
         'completed_at' => 'datetime',
     ];
 
+    protected $fillable = [
+        'customer_id',
+        'total_weight',
+        'total_price',
+        'status',
+        'notes',
+        'pickup',
+        'delivery',
+        'order_date',
+    ];
+
     public function customer()
     {
         return $this->belongsTo(Customer::class)->withDefault([

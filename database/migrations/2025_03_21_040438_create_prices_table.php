@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->nullable()->after('created_at');
+        Schema::create('prices', function (Blueprint $table) {
+            $table->id();
+            $table->id();
+            $table->decimal('price', 10, 2);
+            $table->timestamps();
         });
     }
 
@@ -26,8 +28,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('updated_at');
+        Schema::table('prices', function (Blueprint $table) {
+            //
         });
     }
 };

@@ -14,7 +14,7 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = Order::all();
+        $orders = Order::orderBy('created_at', 'desc')->get();
         return view('orders', compact('orders'));
     }
 
@@ -22,7 +22,7 @@ class OrderController extends Controller
     public function show($id)
     {
         $order = Order::findOrFail($id);
-        return view('order_detail', compact('order'));
+        return view('orders_detail', compact('order'));
     }
 
     // Menambah pesanan baru
@@ -33,14 +33,13 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->pickup);
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
-            'total_weight' => 'nullable|numeric|min:0',
-            'total_price' => 'required|numeric|min:0',
+            'total_weight' => 'nullable|numeric|min:1',
+            'total_price' => 'required|numeric|min:1',
             'status' => 'in:pending,process,done,canceled',
             'notes' => 'nullable|string',
-            'pickup' => 'boolean',
-            'delivery' => 'boolean',
         ]);
 
         $order = Order::create([
@@ -49,11 +48,11 @@ class OrderController extends Controller
             'total_price' => $request->total_price,
             'status' => $request->status ?? 'pending',
             'notes' => $request->notes,
-            'pickup' => $request->pickup ?? false,
-            'delivery' => $request->delivery ?? false,
+            'pickup' => $request->pickup == "on" ? true : false,
+            'delivery' => $request->delivery == "on" ? true : false,
             'order_date' => now(),
         ]);
-
+        
         return redirect()->route('orders.show', $order)->with('success', 'Order berhasil dibuat!');
     }
 
@@ -70,5 +69,16 @@ class OrderController extends Controller
     {
         Order::destroy($id);
         return redirect()->route('home')->with('success', 'Pesanan berhasil dihapus!');
+    }
+
+    public function searchCustomers(Request $request)
+    {
+        $search = $request->get('q');
+        $customers = \App\Models\Customer::where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('phone', 'LIKE', "%{$search}%")
+                    ->limit(10)
+                    ->get();
+
+        return response()->json($customers);
     }
 }
