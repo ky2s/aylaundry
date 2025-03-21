@@ -2,22 +2,36 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
-        </div>
-    </div>
+    <h1>Daftar Pesanan Laundry</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama Pelanggan</th>
+                <th>Jenis Layanan</th>
+                <th>Tanggal Masuk</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Budi Santoso</td>
+                <td>Cuci Kering</td>
+                <td>20 Maret 2025</td>
+                <td>Selesai</td>
+                <td><button>Lihat Detail</button></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Siti Aminah</td>
+                <td>Setrika</td>
+                <td>21 Maret 2025</td>
+                <td>Dalam Proses</td>
+                <td><button>Lihat Detail</button></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 @endsection

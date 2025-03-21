@@ -7,51 +7,54 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    // Buat pesanan baru
-    public function store(Request $request)
+    public function __construct()
     {
-        $request->validate([
-            'service_id' => 'required|exists:services,id',
-            'quantity' => 'required|integer|min:1',
-        ]);
-
-        $service = Service::findOrFail($request->service_id);
-        $totalPrice = $service->price * $request->quantity;
-
-        $order = Order::create([
-            'customer_id' => $request->user()->id,
-            'service_id' => $request->service_id,
-            'quantity' => $request->quantity,
-            'total_price' => $totalPrice,
-        ]);
-
-        return response()->json([
-            'message' => 'Order created successfully',
-            'order' => $order,
-        ]);
+        $this->middleware('auth');
     }
-
-    // Lihat semua pesanan user
+    
     public function index()
     {
-        $orders = Order::where('customer_id', auth()->id())->get();
-        return response()->json($orders);
+        $orders = Order::all();
+        return view('home', compact('orders'));
     }
 
-    // Update status pesanan (admin)
-    public function updateStatus(Request $request, $id)
-    {
-        $order = Order::findOrFail($id);
-        $request->validate(['status' => 'in:Proses,Selesai,Batal']);
-        $order->update(['status' => $request->status]);
-
-        return response()->json(['message' => 'Order status updated', 'order' => $order]);
-    }
-
-    // Detail pesanan
+    // Menampilkan detail pesanan
     public function show($id)
     {
         $order = Order::findOrFail($id);
-        return response()->json($order);
+        return view('order_detail', compact('order'));
+    }
+
+    // Menambah pesanan baru
+    public function create()
+    {
+        return view('order_create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'customer_name' => 'required',
+            'service_type' => 'required',
+            'status' => 'required'
+        ]);
+
+        Order::create($request->all());
+        return redirect()->route('home')->with('success', 'Pesanan berhasil ditambahkan!');
+    }
+
+    // Mengupdate status pesanan
+    public function update(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        $order->update($request->all());
+        return redirect()->route('home')->with('success', 'Pesanan berhasil diperbarui!');
+    }
+
+    // Menghapus pesanan
+    public function destroy($id)
+    {
+        Order::destroy($id);
+        return redirect()->route('home')->with('success', 'Pesanan berhasil dihapus!');
     }
 }
