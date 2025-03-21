@@ -11,11 +11,11 @@ class OrderController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public function index()
     {
         $orders = Order::all();
-        return view('home', compact('orders'));
+        return view('orders', compact('orders'));
     }
 
     // Menampilkan detail pesanan

@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
+    protected $casts = [
+        'order_date' => 'datetime',
+        'completed_at' => 'datetime',
+    ];
 }
