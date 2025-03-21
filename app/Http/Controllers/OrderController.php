@@ -28,19 +28,33 @@ class OrderController extends Controller
     // Menambah pesanan baru
     public function create()
     {
-        return view('order_create');
+        return view('orders_create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'customer_name' => 'required',
-            'service_type' => 'required',
-            'status' => 'required'
+            'customer_id' => 'required|exists:customers,id',
+            'total_weight' => 'nullable|numeric|min:0',
+            'total_price' => 'required|numeric|min:0',
+            'status' => 'in:pending,process,done,canceled',
+            'notes' => 'nullable|string',
+            'pickup' => 'boolean',
+            'delivery' => 'boolean',
         ]);
 
-        Order::create($request->all());
-        return redirect()->route('home')->with('success', 'Pesanan berhasil ditambahkan!');
+        $order = Order::create([
+            'customer_id' => $request->customer_id,
+            'total_weight' => $request->total_weight,
+            'total_price' => $request->total_price,
+            'status' => $request->status ?? 'pending',
+            'notes' => $request->notes,
+            'pickup' => $request->pickup ?? false,
+            'delivery' => $request->delivery ?? false,
+            'order_date' => now(),
+        ]);
+
+        return redirect()->route('orders.show', $order)->with('success', 'Order berhasil dibuat!');
     }
 
     // Mengupdate status pesanan

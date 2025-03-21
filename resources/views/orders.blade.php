@@ -22,7 +22,7 @@
             @foreach($orders as $order)
             <tr>
                 <td>{{ $order->id }}</td>
-                <td>{{ $order->customer_id }}</td>
+                <td>{{ optional($order->customer)->name ?? 'Unknown Customer' }}</td>
                 <td>{{ $order->order_date }}</td>
                 <td>{{ $order->total_weight ?? '-' }}</td>
                 <td>Rp {{ number_format($order->total_price, 2) }}</td>

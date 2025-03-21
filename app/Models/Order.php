@@ -12,4 +12,11 @@ class Order extends Model
         'order_date' => 'datetime',
         'completed_at' => 'datetime',
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class)->withDefault([
+            'name' => 'Unknown Customer',
+        ]);
+    }
 }

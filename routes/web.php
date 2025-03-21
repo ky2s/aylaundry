@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +20,14 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', [App\Http\Controllers\OrderController::class, 'index'])->name('orders');
+// customers
+Route::get('/customers/index', [CustomerController::class, 'index'])->name('customers.index');
+Route::get('/services/index', [ServiceController::class, 'index'])->name('services.index');
+
+
+Route::get('/', [App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
+Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
+Route::get('/orders/store', [OrderController::class, 'store'])->name('orders.store');
 
 // Route::get('/', function () {
 //     return view('orders');
