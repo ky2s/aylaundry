@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->after('created_at');
+            $table->softDeletes();
         });
     }
 
@@ -31,6 +32,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers');
+        Schema::table('customers', function (Blueprint $table) {
+            //
+        });
     }
 };

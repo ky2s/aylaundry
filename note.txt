@@ -1,0 +1,4 @@
+note:
+
+- delete belum bisa
+- validasi edit/update required

@@ -13,10 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('prices', function (Blueprint $table) {
+        Schema::table('prices', function (Blueprint $table) {
             $table->id();
-            $table->id();
-            $table->decimal('price', 10, 2);
+            $table->decimal('price_per_kg', 10, 2);
             $table->timestamps();
         });
     }

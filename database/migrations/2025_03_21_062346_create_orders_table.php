@@ -25,7 +25,7 @@ return new class extends Migration
             $table->boolean('delivery')->default(false);
             $table->timestamp('completed_at')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->nullable()->after('created_at');
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

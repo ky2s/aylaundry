@@ -22,8 +22,14 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 // customers
-Route::get('/customers/index', [CustomerController::class, 'index'])->name('customers.index');
-Route::get('/customers/search', [OrderController::class, 'searchCustomers'])->name('customers.search');
+Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
+Route::post('/customers/store', [CustomerController::class, 'store'])->name('customers.store');
+Route::get('/customers/edit/{customer}', [CustomerController::class, 'edit'])->name('customers.edit');
+Route::post('/customers/update', [CustomerController::class, 'update'])->name('customers.update');
+Route::get('/customers/{customer_id}', [CustomerController::class, 'show'])->name('customers.show');
+Route::post('/customers/destroy/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+Route::get('/customers/search', [CustomerController::class, 'searchCustomers'])->name('customers.search');
 
 // price
 Route::get('/prices/get', [PricesController::class, 'getPrice'])->name('prices.get');
@@ -36,10 +42,4 @@ Route::get('/', [App\Http\Controllers\OrderController::class, 'index'])->name('o
 Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
 Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.store');
 Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
-Route::get('/orders/show/{order_id}', [OrderController::class, 'show'])->name('orders.show');
-
-// Route::get('/', function () {
-//     return view('orders');
-// });
-
-// Route::get('/orders', [OrderController::class, 'index']);
+Route::get('/orders/{order_id}', [OrderController::class, 'show'])->name('orders.show');

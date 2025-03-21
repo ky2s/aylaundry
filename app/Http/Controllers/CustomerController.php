@@ -14,7 +14,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        dd("ok");
+        $customers = Customer::orderBy('created_at', 'desc')->get();
+        return view('customers', compact('customers'));
     }
 
     /**
@@ -24,7 +25,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        return view('customers_create');
     }
 
     /**
@@ -35,7 +36,15 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'phone' => 'required|string|max:15|unique:customers,phone',
+            'email' => 'nullable|email|max:100|unique:customers,email',
+            'address' => 'nullable|string',
+        ]);
+
+        Customer::create($request->all());
+        return redirect()->route('customers.index')->with('success', 'Customer berhasil ditambahkan!');
     }
 
     /**
@@ -46,7 +55,7 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        //
+        return view('customers_show', compact('customer'));
     }
 
     /**
@@ -57,7 +66,7 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        //
+        return view('customers_edit', compact('customer'));
     }
 
     /**
@@ -69,7 +78,15 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'phone' => 'required|string|max:15|unique:customers,phone,' . $customer->id,
+            'email' => 'nullable|email|max:100|unique:customers,email,' . $customer->id,
+            'address' => 'nullable|string',
+        ]);
+
+        $customer->update($request->all());
+        return redirect()->route('customers.index')->with('success', 'Customer berhasil diupdate!');
     }
 
     /**
@@ -80,6 +97,7 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        $customer->softDeleted();
+        return redirect()->route('customers.index')->with('success', 'Customer berhasil dihapus!');
     }
 }

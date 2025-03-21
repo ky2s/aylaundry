@@ -21,7 +21,7 @@
         <tbody>
             @foreach($orders as $order)
             <tr>
-                <td><a href="{{url('/orders/show/'.$order->id)}}">{{ $order->id }}</a></td>
+                <td><a href="{{url('/orders/'.$order->id)}}">{{ $order->id }}</a></td>
                 <td>{{ optional($order->customer)->name ?? 'Unknown Customer' }}</td>
                 <td>{{ $order->order_date }}</td>
                 <td>{{ $order->total_weight ?? '-' }}</td>
