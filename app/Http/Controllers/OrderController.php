@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Services;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -28,12 +29,12 @@ class OrderController extends Controller
     // Menambah pesanan baru
     public function create()
     {
-        return view('orders_create');
+        $services = Services::all();
+        return view('orders_create', compact("services"));
     }
 
     public function store(Request $request)
     {
-        // dd($request->pickup);
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'total_weight' => 'nullable|numeric|min:1',
@@ -41,9 +42,10 @@ class OrderController extends Controller
             'status' => 'in:pending,process,done,canceled',
             'notes' => 'nullable|string',
         ]);
-
+        // dd($request);
         $order = Order::create([
             'customer_id' => $request->customer_id,
+            'service_id' => $request->service_id,
             'total_weight' => $request->total_weight,
             'total_price' => $request->total_price,
             'status' => $request->status ?? 'pending',

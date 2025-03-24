@@ -9,6 +9,10 @@
             <td>{{ $order->id }}</td>
         </tr>
         <tr>
+            <th>Layanan</th>
+            <td>{{ $order->service->service_name }}</td>
+        </tr>
+        <tr>
             <th>Customer</th>
             <td>{{ $order->customer->name }}</td>
         </tr>

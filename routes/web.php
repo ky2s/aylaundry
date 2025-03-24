@@ -1,10 +1,9 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PricesController;
+use App\Http\Controllers\ServicesController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -37,8 +36,7 @@ Route::get('/customers_search', [CustomerController::class, 'search'])->name('cu
 Route::get('/prices/get', [PricesController::class, 'getPrice'])->name('prices.get');
 
 // service
-Route::get('/services/index', [ServiceController::class, 'index'])->name('services.index');
-
+Route::resource('services', ServicesController::class);
 
 Route::get('/', [App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
 Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');

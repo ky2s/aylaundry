@@ -15,6 +15,7 @@ class Order extends Model
 
     protected $fillable = [
         'customer_id',
+        'service_id',
         'total_weight',
         'total_price',
         'status',
@@ -28,6 +29,13 @@ class Order extends Model
     {
         return $this->belongsTo(Customer::class)->withDefault([
             'name' => 'Unknown Customer',
+        ]);
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class)->withDefault([
+            'service_name' => 'Unknown Customer',
         ]);
     }
 }

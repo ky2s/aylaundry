@@ -22,6 +22,16 @@
         </div>
 
         <div class="mb-3">
+            <label for="service_id" class="form-label">Pilih Layanan</label>
+            <select class="form-select" id="service_id" name="service_id" required>
+                <option value="" disabled selected>Pilih layanan...</option>
+                @foreach($services as $service)
+                    <option value="{{ $service->id }}">{{ $service->service_name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="mb-3">
             <label for="total_weight" class="form-label">Total Weight (kg)</label>
             <input type="number" class="form-control" name="total_weight" id="total_weight" step="0.01">
         </div>

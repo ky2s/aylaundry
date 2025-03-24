@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id('id');
             $table->foreignId('customer_id')->constrained('customers');
+            $table->foreignId('service_id')->constrained('services');
             $table->timestamp('order_date')->useCurrent();
             $table->decimal('total_weight', 5, 2)->nullable();
             $table->decimal('total_price', 10, 2);

@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Customer;
+use App\Models\Service;
+use App\Models\Services;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,6 +21,7 @@ class OrderFactory extends Factory
     {
         return [
             'customer_id' => Customer::factory(),
+            'service_id' => Services::factory(),
             'order_date' => now(),
             'total_weight' => $this->faker->randomFloat(2, 1, 10),
             'total_price' => $this->faker->randomFloat(2, 5000, 50000),

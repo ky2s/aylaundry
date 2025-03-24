@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
 <h1>Daftar Customer</h1>
-    <a href="{{ route('customers.create') }}">Tambah Customer</a>
+    <a href="{{ route('services.create') }}" class="btn btn-primary mb-3">Tambah Customer</a>
 
     @if(session('success'))
         <p style="color: green;">{{ session('success') }}</p>
