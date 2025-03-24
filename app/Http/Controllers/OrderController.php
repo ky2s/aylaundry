@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Services;
+use App\Models\Statuses;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -23,7 +24,8 @@ class OrderController extends Controller
     public function show($id)
     {
         $order = Order::findOrFail($id);
-        return view('orders_detail', compact('order'));
+        $statuses = Statuses::all();
+        return view('orders_detail', compact('order', 'statuses'));
     }
 
     // Menambah pesanan baru
@@ -82,5 +84,18 @@ class OrderController extends Controller
                     ->get();
 
         return response()->json($customers);
+    }
+
+    public function updateStatus(Request $request, Order $order)
+    {
+
+        $statuses = Statuses::pluck('name')->join(',');
+        $request->validate([
+            'status' => "required|in:$statuses"
+        ]);
+
+        $order->update(['status' => $request->status]);
+
+        return back()->with('success', 'Status updated!');
     }
 }

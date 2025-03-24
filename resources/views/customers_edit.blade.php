@@ -17,7 +17,7 @@
 
     <form action="{{ route('customers.update', $customer->id) }}" method="POST" class="p-4 bg-light shadow-sm rounded">
         @csrf
-        @method('PUT')
+        @method('POST')
     
         <div class="mb-3">
             <label for="name" class="form-label">Nama</label>

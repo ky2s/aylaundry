@@ -34,7 +34,7 @@ class Order extends Model
 
     public function service()
     {
-        return $this->belongsTo(Service::class)->withDefault([
+        return $this->belongsTo(Services::class)->withDefault([
             'service_name' => 'Unknown Customer',
         ]);
     }

@@ -5,7 +5,7 @@
     <h1>Edit Service</h1>
     <form action="{{ route('services.update', $service->id) }}" method="POST">
         @csrf
-        @method('PUT')
+        @method('POST')
         @include('services.form')
         <button type="submit" class="btn btn-primary">Update</button>
     </form>

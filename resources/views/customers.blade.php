@@ -9,7 +9,7 @@
         <p style="color: green;">{{ session('success') }}</p>
     @endif
 
-    <table border="1" cellpadding="10">
+    <table border="1" cellpadding="10" class="table table-striped">
         <thead>
             <tr>
                 <th>Nama</th>
@@ -25,11 +25,11 @@
                     <td>{{ $customer->phone }}</td>
                     <td>{{ $customer->email }}</td>
                     <td>
-                        <a href="{{ route('customers.edit', $customer) }}">Edit</a> | 
+                        <a href="{{ route('customers.edit', $customer) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('customers.destroy', $customer) }}" method="POST" style="display:inline;">
                             @csrf
-                            @method('POST')
-                            <button type="submit" onclick="return confirm('Yakin hapus?')">Hapus</button>
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
                         </form>
                     </td>
                 </tr>

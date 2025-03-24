@@ -43,3 +43,5 @@ Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.c
 Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.store');
 Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 // Route::get('/orders/{order_id}', [OrderController::class, 'show'])->name('orders.show');
+Route::post('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+
