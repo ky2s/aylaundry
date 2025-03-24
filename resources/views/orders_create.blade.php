@@ -71,8 +71,10 @@
             let query = $(this).val();
 
             if (query.length >= 3) {
+                console.log(query);
                 typingTimer = setTimeout(() => {
                     $.get("{{ route('customers.search') }}", { q: query }, function(data) {
+                        console.log(data);
                         let dropdown = '<ul class="list-group position-absolute w-100">';
                         data.forEach(customer => {
                             dropdown += `<li class="list-group-item list-group-item-action" data-id="${customer.id}">${customer.name} - ${customer.phone}</li>`;

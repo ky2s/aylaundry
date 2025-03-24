@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -99,5 +104,23 @@ class CustomerController extends Controller
     {
         $customer->softDeleted();
         return redirect()->route('customers.index')->with('success', 'Customer berhasil dihapus!');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Customer  $customer
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        $search = $request->get('q');
+       
+        $customers = \App\Models\Customer::where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('phone', 'LIKE', "%{$search}%")
+                    ->limit(10)
+                    ->get();
+
+        return response()->json($customers);
     }
 }

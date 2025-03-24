@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
     <h1>Detail Customer</h1>
 
     <table border="1" cellpadding="10" cellspacing="0">
@@ -22,7 +23,7 @@
         </tr>
         <tr>
             <th>Dibuat</th>
-            <td>{{ $customer->created_at->format('d-m-Y H:i') }}</td>
+            {{-- <td>{{ $customer->created_at->format('d-m-Y H:i') }}</td> --}}
         </tr>
     </table>
 
@@ -36,4 +37,5 @@
         @method('DELETE')
         <button type="submit" onclick="return confirm('Yakin hapus customer ini?')">Hapus Customer</button>
     </form>
+</div>
 @endsection
