@@ -3,6 +3,7 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PricesController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ServicesController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -44,4 +45,7 @@ Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.st
 Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 // Route::get('/orders/{order_id}', [OrderController::class, 'show'])->name('orders.show');
 Route::post('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+
+// report
+Route::get('/report', [ReportController::class, 'index'])->name('report.index');
 

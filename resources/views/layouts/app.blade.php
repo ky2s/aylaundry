@@ -48,6 +48,9 @@
                                 <li><a class="dropdown-item" href="{{ route('orders.create') }}">New Order</a></li>
                             </ul>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('report.index') }}">Laporan Keuangan</a>
+                        </li>
                     </ul>
         
                     <!-- Right Side Of Navbar -->
