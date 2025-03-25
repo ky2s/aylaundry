@@ -20,4 +20,9 @@ class OrderDetail extends Model
         'quantity',
         'sub_total',
     ];
+
+    public function service()
+    {
+        return $this->belongsTo(Services::class);
+    }
 }

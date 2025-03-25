@@ -25,7 +25,7 @@ class OrderController extends Controller
     // Menampilkan detail pesanan
     public function show($id)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::with('orderDetails.service')->find($id);
         $statuses = Statuses::all();
         return view('orders_detail', compact('order', 'statuses'));
     }
@@ -117,7 +117,7 @@ class OrderController extends Controller
                 'price_per_item' => $service->price_per_item,
                 'estimated_time' => $service->estimated_time,
                 'quantity' => $serviceData['quantity'],
-                'sub_total' => $service->price * $serviceData['quantity'],
+                'sub_total' => $service->price_per_kg * $serviceData['quantity'],
             ]);
         }
         

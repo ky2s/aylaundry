@@ -21,7 +21,7 @@
         </tr>
         <tr>
             <th>Order Date</th>
-            <td>{{ $order->created_at }}</td>
+            <td>{{ $order->created_at->format('d-m-Y H:i') }}</td>
         </tr>
         <tr>
             <th>Total Weight (kg)</th>
@@ -72,7 +72,32 @@
         </tr>
     </table>
 
-    
+     <!-- Detail Layanan -->
+     <h3 class="mt-4">Layanan</h3>
+     <table class="table table-striped">
+         <thead>
+             <tr>
+                 <th>Nama Layanan</th>
+                 <th>Harga per Kg</th>
+                 <th>Harga per Item</th>
+                 <th>Waktu Estimasi (menit)</th>
+                 <th>Jumlah</th>
+                 <th>Subtotal</th>
+             </tr>
+         </thead>
+         <tbody>
+             @foreach($order->orderDetails as $detail)
+                 <tr>
+                     <td>{{ $detail->service_name }}</td>
+                     <td>Rp {{ number_format($detail->price_per_kg, 2, ',', '.') }}</td>
+                     <td>Rp {{ number_format($detail->price_per_item, 2, ',', '.') }}</td>
+                     <td>{{ $detail->estimated_time }}</td>
+                     <td>{{ $detail->quantity }}</td>
+                     <td>Rp {{ number_format($detail->sub_total, 2, ',', '.') }}</td>
+                 </tr>
+             @endforeach
+         </tbody>
+     </table>
 
     <a href="{{ route('orders.index') }}" class="btn btn-secondary">Back to Orders</a>
 </div>

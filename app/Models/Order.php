@@ -39,4 +39,9 @@ class Order extends Model
         return $this->belongsToMany(Services::class, 'order_details')
                     ->withPivot('service_id','service_name','price_per_kg','price_per_item','estimated_time','quantity', 'sub_total');
     }
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
 }

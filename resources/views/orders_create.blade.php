@@ -36,12 +36,12 @@
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label for="services[0][quantity]" class="form-label">Kuantitas</label>
-                        <input type="number" class="form-control" name="services[0][quantity]" min="1" required>
-                    </div>
-                    <div class="col-md-3">
                         <label for="services[0][weight]" class="form-label">Berat (kg)</label>
                         <input type="number" step="0.01" class="form-control" name="services[0][weight]" min="0">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="services[0][quantity]" class="form-label">Kuantitas</label>
+                        <input type="number" class="form-control" name="services[0][quantity]" min="1" required>
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
                         <button type="button" class="btn btn-danger remove-service">Hapus</button>
