@@ -15,4 +15,11 @@ class Services extends Model
         'price_per_item', 'estimated_time', 'category_id',
         'is_active', 'image_url'
     ];
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'order_details')
+                    ->withPivot('quantity', 'sub_total');
+    }
+
 }

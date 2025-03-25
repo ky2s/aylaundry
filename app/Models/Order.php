@@ -15,14 +15,16 @@ class Order extends Model
 
     protected $fillable = [
         'customer_id',
-        'service_id',
+        'name',
+        'email',
+        'phone',
+        'address',
         'total_weight',
         'total_price',
         'status',
         'notes',
         'pickup',
         'delivery',
-        'order_date',
     ];
 
     public function customer()
@@ -32,10 +34,9 @@ class Order extends Model
         ]);
     }
 
-    public function service()
+    public function services()
     {
-        return $this->belongsTo(Services::class)->withDefault([
-            'service_name' => 'Unknown Customer',
-        ]);
+        return $this->belongsToMany(Services::class, 'order_details')
+                    ->withPivot('service_id','service_name','price_per_kg','price_per_item','estimated_time','quantity', 'sub_total');
     }
 }

@@ -16,16 +16,12 @@
             <td>{{ $order->id }}</td>
         </tr>
         <tr>
-            <th>Layanan</th>
-            <td>{{ $order->service->service_name }}</td>
-        </tr>
-        <tr>
             <th>Customer</th>
             <td>{{ $order->customer->name }}</td>
         </tr>
         <tr>
             <th>Order Date</th>
-            <td>{{ $order->order_date }}</td>
+            <td>{{ $order->created_at }}</td>
         </tr>
         <tr>
             <th>Total Weight (kg)</th>

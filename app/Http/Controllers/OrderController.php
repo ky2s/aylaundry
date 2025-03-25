@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Services;
 use App\Models\Statuses;
 use Illuminate\Http\Request;
@@ -35,7 +37,7 @@ class OrderController extends Controller
         return view('orders_create', compact("services"));
     }
 
-    public function store(Request $request)
+    public function store_v1(Request $request)
     {
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
@@ -58,6 +60,70 @@ class OrderController extends Controller
         ]);
         
         return redirect()->route('orders.show', $order)->with('success', 'Order berhasil dibuat!');
+    }
+
+    public function store(Request $request)
+    {
+        // Validasi data yang diterima dari form
+        $validatedData = $request->validate([
+            'customer_id' => 'required|numeric|exists:customers,id',
+            'services' => 'required|array',
+            'services.*.id' => 'required|exists:services,id',
+            'services.*.quantity' => 'required|numeric|min:1',
+            'services.*.weight' => 'required|numeric|min:1',
+            'total_weight' => 'nullable|numeric|min:1',
+            'total_price' => 'required|min:1',
+            'notes' => 'nullable|string',
+        ]);
+        // dd($validatedData['services']);
+        // Hitung total harga pesanan berdasarkan layanan yang dipilih
+        $totalPrice = 0;
+        $totalWeight = 0;
+        foreach ($validatedData['services'] as $serviceData) {
+            $service = Services::find($serviceData['id']);
+            // $totalPrice += $service->price * $serviceData['quantity'];
+            $weight = $serviceData['weight'] ?? 1; 
+            $quantity = $serviceData['quantity'];
+            $totalWeight += $weight * $quantity;
+            $totalPrice += $service->price_per_kg * $weight * $quantity;
+        }
+        // dd($totalWeight, $totalPrice);
+        
+        $customer = Customer::find($request->customer_id);
+        // Buat entri baru di tabel orders
+        $order = Order::create([
+            'customer_id' => $request->customer_id,
+            'name' => $customer->name,
+            'email' => $customer->email,
+            'phone' => $customer->phone,
+            'address' => $customer->address,
+            'total_price' => $totalPrice,
+            'total_weight' => $totalWeight,
+            'total_price' => $totalPrice,
+            'status' => $request->status ?? 'pending',
+            'notes' => $request->notes,
+            'delivery' => $request->delivery == "yes" ? true : false,
+        ]);
+
+        // Simpan detail layanan yang dipesan ke dalam tabel pivot order_details
+        foreach ($validatedData['services'] as $serviceData) {
+            $service = Services::find($serviceData['id']);
+            
+            OrderDetail::create([
+                'order_id' => $order->id,
+                'service_id' => $service->id,
+                'service_name' => $service->service_name,
+                'price_per_kg' => $service->price_per_kg,
+                'price_per_item' => $service->price_per_item,
+                'estimated_time' => $service->estimated_time,
+                'quantity' => $serviceData['quantity'],
+                'sub_total' => $service->price * $serviceData['quantity'],
+            ]);
+        }
+        
+
+        // Redirect atau kembalikan respons sesuai kebutuhan
+        return redirect()->route('orders.index')->with('success', 'Pesanan berhasil dibuat.');
     }
 
     // Mengupdate status pesanan

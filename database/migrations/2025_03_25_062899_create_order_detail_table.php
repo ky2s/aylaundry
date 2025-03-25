@@ -17,6 +17,10 @@ return new class extends Migration
             $table->id('id');
             $table->foreignId('order_id')->constrained('orders');
             $table->foreignId('service_id')->constrained('services');
+            $table->string('service_name', 50);
+            $table->decimal('price_per_kg', 10, 2)->nullable();
+            $table->decimal('price_per_item', 10, 2)->nullable();
+            $table->integer('estimated_time')->nullable();
             $table->decimal('quantity', 10, 2);
             $table->decimal('sub_total', 10, 2);
         });
@@ -29,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_details');
+        Schema::dropIfExists('order_detail');
     }
 };

@@ -8,12 +8,12 @@
             <tr>
                 <th>ID</th>
                 <th>Customer</th>
-                <th>Order Date</th>
                 <th>Weight (kg)</th>
                 <th>Total Price</th>
                 <th>Status</th>
                 <th>Pickup</th>
                 <th>Delivery</th>
+                <th>Order Date</th>
                 <th>Completed At</th>
             </tr>
         </thead>
@@ -22,7 +22,6 @@
             <tr>
                 <td><a href="{{url('/orders/'.$order->id)}}">{{ $order->id }}</a></td>
                 <td>{{ optional($order->customer)->name ?? 'Unknown Customer' }}</td>
-                <td>{{ $order->order_date ? $order->order_date->format('d M Y H:i') : '-' }}</td>
                 <td>{{ $order->total_weight ?? '-' }}</td>
                 <td>Rp {{ number_format($order->total_price, 2) }}</td>
                 <td>
@@ -32,6 +31,7 @@
                 </td>
                 <td>{{ $order->pickup ? 'Yes' : 'No' }}</td>
                 <td>{{ $order->delivery ? 'Yes' : 'No' }}</td>
+                <td>{{ $order->created_at ? $order->created_at->format('d M Y H:i') : '-' }}</td>
                 <td>{{ $order->completed_at ? $order->completed_at->format('d M Y H:i') : '-' }}</td>
             </tr>
             @endforeach
