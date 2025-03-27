@@ -79,7 +79,20 @@
             </div>
         </div>
 
+        <div class="mb-3">
+            <label class="form-label">Metode Pembayaran</label>
+            @foreach($paymentMethods as $method)
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="payment_method_id" 
+                           id="payment_{{ $method->id }}" value="{{ $method->id }}" required>
+                    <label for="payment_{{ $method->id }}" class="form-check-label">{{ $method->name }}</label>
+                </div>
+            @endforeach
+        </div>
+
         <button type="submit" class="btn btn-primary">Simpan Pesanan</button>
+        <a href="{{ route('orders.index') }}" class="btn btn-secondary">Batal</a>
+
     </form>
 </div>
 

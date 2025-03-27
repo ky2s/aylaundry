@@ -40,6 +40,8 @@ Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.st
 Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 // Route::get('/orders/{order_id}', [OrderController::class, 'show'])->name('orders.show');
 Route::post('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+Route::get('/orders/{order}/receipt', [OrderController::class, 'receipt'])->name('orders.receipt');
+
 
 // price
 Route::get('/prices/get', [PricesController::class, 'getPrice'])->name('prices.get');

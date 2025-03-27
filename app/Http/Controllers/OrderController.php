@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\PaymentMethod;
 use App\Models\Services;
 use App\Models\Statuses;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Services\FlipService;
 
 class OrderController extends Controller
 {
@@ -26,7 +29,7 @@ class OrderController extends Controller
             return $query->whereHas('customer', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%");
             });
-        })->paginate($limit);
+        })->orderBy('created_at', 'desc')->paginate($limit);
 
         // $orders = Order::orderBy('created_at', 'desc')->paginate($limit);
         return view('orders', compact('orders'));
@@ -44,7 +47,8 @@ class OrderController extends Controller
     public function create()
     {
         $services = Services::all();
-        return view('orders_create', compact("services"));
+        $paymentMethods = PaymentMethod::all();
+        return view('orders_create', compact("services","paymentMethods"));
     }
 
     public function store_v1(Request $request)
@@ -74,6 +78,12 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
+
+        $flip = new FlipService();
+    
+        $customer = Customer::find($request->customer_id);
+        $va = $flip->createVirtualAccount($customer);
+        
         // Validasi data yang diterima dari form
         $validatedData = $request->validate([
             'customer_id' => 'required|numeric|exists:customers,id',
@@ -84,56 +94,76 @@ class OrderController extends Controller
             'total_weight' => 'nullable|numeric|min:1',
             'total_price' => 'required|min:1',
             'notes' => 'nullable|string',
+            'payment_method_id' => 'required|exists:payment_methods,id',
         ]);
-        // dd($validatedData['services']);
+        
         // Hitung total harga pesanan berdasarkan layanan yang dipilih
-        $totalPrice = 0;
-        $totalWeight = 0;
-        foreach ($validatedData['services'] as $serviceData) {
-            $service = Services::find($serviceData['id']);
-            // $totalPrice += $service->price * $serviceData['quantity'];
-            $weight = $serviceData['weight'] ?? 1; 
-            $quantity = $serviceData['quantity'];
-            $totalWeight += $weight * $quantity;
-            $totalPrice += $service->price_per_kg * $weight * $quantity;
-        }
-        // dd($totalWeight, $totalPrice);
+        DB::beginTransaction();
         
-        $customer = Customer::find($request->customer_id);
-        // Buat entri baru di tabel orders
-        $order = Order::create([
-            'customer_id' => $request->customer_id,
-            'name' => $customer->name,
-            'email' => $customer->email,
-            'phone' => $customer->phone,
-            'address' => $customer->address,
-            'total_price' => $totalPrice,
-            'total_weight' => $totalWeight,
-            'total_price' => $totalPrice,
-            'status' => $request->status ?? 'pending',
-            'notes' => $request->notes,
-            'delivery' => $request->delivery == "yes" ? true : false,
-        ]);
-
-        // Simpan detail layanan yang dipesan ke dalam tabel pivot order_details
-        foreach ($validatedData['services'] as $serviceData) {
-            $service = Services::find($serviceData['id']);
-            
-            OrderDetail::create([
-                'order_id' => $order->id,
-                'service_id' => $service->id,
-                'service_name' => $service->service_name,
-                'price_per_kg' => $service->price_per_kg,
-                'price_per_item' => $service->price_per_item,
-                'estimated_time' => $service->estimated_time,
-                'quantity' => $serviceData['quantity'],
-                'sub_total' => $service->price_per_kg * $serviceData['quantity'],
+        try {
+            // Hitung total harga dan berat pesanan
+            $totalPrice = 0;
+            $totalWeight = 0;
+    
+            foreach ($validatedData['services'] as $serviceData) {
+                $service = Services::findOrFail($serviceData['id']);
+                $weight = $serviceData['weight'] ?? 1; 
+                $quantity = $serviceData['quantity'];
+                $totalWeight += $weight * $quantity;
+                $totalPrice += $service->price_per_kg * $weight * $quantity;
+            }
+    
+            // Ambil data customer
+            $customer = Customer::findOrFail($request->customer_id);
+    
+            // Simpan order
+            $order = Order::create([
+                'customer_id' => $request->customer_id,
+                'name' => $customer->name,
+                'email' => $customer->email,
+                'phone' => $customer->phone,
+                'address' => $customer->address,
+                'total_price' => $totalPrice,
+                'total_weight' => $totalWeight,
+                'status' => $request->status ?? 'pending',
+                'notes' => $request->notes,
+                'delivery' => $request->delivery == "yes" ? true : false,
+                'payment_method_id' => $request->payment_method_id,
             ]);
+    
+            // Simpan detail order
+            foreach ($validatedData['services'] as $serviceData) {
+                $service = Services::findOrFail($serviceData['id']);
+                
+                OrderDetail::create([
+                    'order_id' => $order->id,
+                    'service_id' => $service->id,
+                    'service_name' => $service->service_name,
+                    'price_per_kg' => $service->price_per_kg,
+                    'price_per_item' => $service->price_per_item,
+                    'estimated_time' => $service->estimated_time,
+                    'quantity' => $serviceData['quantity'],
+                    'sub_total' => $service->price_per_kg * $serviceData['quantity'],
+                ]);
+            }
+    
+            // Commit transaksi jika semua berhasil
+            DB::commit();
+    
+            // return redirect()->route('orders.index')->with('success', 'Pesanan berhasil dibuat.');
+            return redirect()->route('orders.receipt', ['order' => $order->id])->with('success', 'Pesanan berhasil dibuat.');
+    
+        } catch (\Exception $e) {
+            // Rollback jika ada kesalahan
+            DB::rollBack();
+    
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan pesanan: ' . $e->getMessage());
         }
-        
+    }
 
-        // Redirect atau kembalikan respons sesuai kebutuhan
-        return redirect()->route('orders.index')->with('success', 'Pesanan berhasil dibuat.');
+    public function receipt(Order $order)
+    {
+        return view('orders_receipt', compact('order'));
     }
 
     // Mengupdate status pesanan

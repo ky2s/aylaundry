@@ -25,6 +25,7 @@ class Order extends Model
         'notes',
         'pickup',
         'delivery',
+        'payment_method_id',
     ];
 
     public function customer()
@@ -37,11 +38,23 @@ class Order extends Model
     public function services()
     {
         return $this->belongsToMany(Services::class, 'order_details')
-                    ->withPivot('service_id','service_name','price_per_kg','price_per_item','estimated_time','quantity', 'sub_total');
+                    ->withPivot('service_id',
+                                'service_name',
+                                'price_per_kg',
+                                'price_per_item',
+                                'estimated_time',
+                                'quantity', 
+                                'sub_total',
+                        );
     }
 
     public function orderDetails()
     {
         return $this->hasMany(OrderDetail::class);
+    }
+
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class);
     }
 }
