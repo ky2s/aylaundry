@@ -20,39 +20,40 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nama</th>
-                <th>Email</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($kasirs as $index => $kasir)
-            <tr>
-                <td>{{ $kasirs->firstItem() + $index }}</td>
-                <td>{{ $kasir->name }}</td>
-                <td>{{ $kasir->email }}</td>
-                <td>
-                    <a href="{{ route('kasir.edit', $kasir->id) }}" class="btn btn-sm btn-info">Edit</a>
-                    <form action="{{ route('kasir.destroy', $kasir->id) }}" method="POST" style="display:inline-block;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus kasir ini?')">Hapus</button>
-                    </form>
-                </td>
-            </tr>
-
-            @empty
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
                 <tr>
-                    <td colspan="5" class="text-center text-muted">Tidak ada data yang ditemukan.</td>
+                    <th>#</th>
+                    <th>Nama</th>
+                    <th>Email</th>
+                    <th>Aksi</th>
                 </tr>
-            @endforelse
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @forelse($kasirs as $index => $kasir)
+                <tr>
+                    <td>{{ $kasirs->firstItem() + $index }}</td>
+                    <td>{{ $kasir->name }}</td>
+                    <td>{{ $kasir->email }}</td>
+                    <td>
+                        <a href="{{ route('kasir.edit', $kasir->id) }}" class="btn btn-sm btn-info">Edit</a>
+                        <form action="{{ route('kasir.destroy', $kasir->id) }}" method="POST" style="display:inline-block;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus kasir ini?')">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Tidak ada data yang ditemukan.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 
     <!-- Tambahin navigasi pagination -->
     <div class="d-flex justify-content-center mt-3">

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
+<div class="container">
     <h2 class="mb-4">Laporan Keuangan</h2>
 
     <div class="row">

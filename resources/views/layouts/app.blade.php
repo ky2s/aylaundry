@@ -21,60 +21,59 @@
 <body>
     <div id="app">
         @auth
-        <header class="d-flex flex-wrap justify-content-center border-bottom">
-            <div class="container d-flex flex-wrap align-items-center justify-content-between">
-                <a href="{{ url('/') }}" class="d-flex align-items-center mb-2 mb-md-0 text-dark text-decoration-none">
-                    <span class="fs-4 fw-bold">{{ config('app.name', 'Laravel') }}</span>
-                </a>
-        
-                <ul class="nav nav-pills">
-                    @auth
-                        <li class="nav-item"><a href="{{ route('customers.index') }}" class="nav-link">Customers</a></li>
-                        @if(Auth::user()->role === 'admin')
-                            <li class="nav-item"><a href="{{ route('services.index') }}" class="nav-link">Services</a></li>
-                        @endif
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarOrders" role="button" data-bs-toggle="dropdown">
-                                Orders
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('orders.index') }}">All Orders</a></li>
-                                <li><a class="dropdown-item" href="{{ route('orders.create') }}">New Order</a></li>
-                            </ul>
-                        </li>
-                        @if(Auth::user()->role === 'admin')
-                            <li class="nav-item"><a href="{{ route('report.index') }}" class="nav-link">Laporan Keuangan</a></li>
-                            <li class="nav-item"><a href="{{ route('kasir.index') }}" class="nav-link">Daftar Kasir</a></li>
-                        @endif
-                    @endauth
-                </ul>
-        
-                <div>
-                    @guest
-                        @if (Route::has('login'))
-                            <a href="{{ route('login') }}" class="btn btn-outline-primary me-2">Login</a>
-                        @endif
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-primary">Sign up</a>
-                        @endif
-                    @else
-                        <div class="dropdown">
-                            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown">
-                                <span class="me-2">{{ Auth::user()->name }}</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('logout') }}" 
-                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        Logout
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
-                    @endguest
+        <header class="navbar navbar-expand-lg navbar-light bg-white__ border-bottom">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        @auth
+                            <li class="nav-item"><a href="{{ route('customers.index') }}" class="nav-link">Pelanggan</a></li>
+                            @if(Auth::user()->role === 'admin')
+                                <li class="nav-item"><a href="{{ route('services.index') }}" class="nav-link">Layanan</a></li>
+                            @endif
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarOrders" role="button" data-bs-toggle="dropdown">Pesanan</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ route('orders.index') }}">Semua Pesanan</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('orders.create') }}">Pesanan Baru</a></li>
+                                </ul>
+                            </li>
+                            @if(Auth::user()->role === 'admin')
+                                <li class="nav-item"><a href="{{ route('report.index') }}" class="nav-link">Laporan Keuangan</a></li>
+                                <li class="nav-item"><a href="{{ route('kasir.index') }}" class="nav-link">Daftar Kasir</a></li>
+                            @endif
+                        @endauth
+                    </ul>
+                    <div class="ms-lg-3">
+                        @guest
+                            @if (Route::has('login'))
+                                <a href="{{ route('login') }}" class="btn btn-outline-primary me-2">Masuk</a>
+                            @endif
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="btn btn-primary">Daftar</a>
+                            @endif
+                        @else
+                            <div class="dropdown">
+                                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown">
+                                    <span class="me-2">{{ Auth::user()->name }}</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('logout') }}" 
+                                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            Keluar
+                                        </a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        @endguest
+                    </div>
                 </div>
             </div>
         </header>
