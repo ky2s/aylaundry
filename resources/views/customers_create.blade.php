@@ -40,7 +40,7 @@
             <textarea class="form-control" id="address" name="address">{{ old('address') }}</textarea>
         </div>
     
-        <button type="submit" class="btn btn-success">Simpan</button>
+        <button type="submit" class="btn btn-primary">Simpan</button>
         <a href="{{ route('customers.index') }}" class="btn btn-secondary">Batal</a>
     </form>
 </div>    

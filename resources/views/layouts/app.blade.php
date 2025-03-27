@@ -28,17 +28,20 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-        
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    @auth
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <!-- Menu utama -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('customers.index') }}">Customers</a>
                         </li>
+                        @if(Auth::check() && Auth::user()->role === 'admin')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('services.index') }}">Services</a>
                         </li>
+                        @endif
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarOrders" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Orders
@@ -48,10 +51,17 @@
                                 <li><a class="dropdown-item" href="{{ route('orders.create') }}">New Order</a></li>
                             </ul>
                         </li>
+                        
+                        @if(Auth::check() && Auth::user()->role === 'admin')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('report.index') }}">Laporan Keuangan</a>
                         </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('kasir.index') }}">Daftar Kasir</a>
+                            </li>
+                        @endif
                     </ul>
+                    @endauth
         
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
@@ -89,6 +99,7 @@
                         @endguest
                     </ul>
                 </div>
+                
             </div>
         </nav>        
 

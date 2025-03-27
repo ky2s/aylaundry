@@ -18,7 +18,9 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = Order::orderBy('created_at', 'desc')->get();
+        $limit = config('app.pagination.limit');
+
+        $orders = Order::orderBy('created_at', 'desc')->paginate($limit);
         return view('orders', compact('orders'));
     }
 

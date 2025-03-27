@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
 <h1>Daftar Customer</h1>
-    <a href="{{ route('services.create') }}" class="btn btn-primary mb-3">Tambah Customer</a>
+    <a href="{{ route('customers.create') }}" class="btn btn-primary mb-3">Tambah Customer</a>
 
     @if(session('success'))
         <p style="color: green;">{{ session('success') }}</p>
@@ -12,6 +12,7 @@
     <table border="1" cellpadding="10" class="table table-striped">
         <thead>
             <tr>
+                <th>#</th>
                 <th>Nama</th>
                 <th>Telepon</th>
                 <th>Email</th>
@@ -19,8 +20,9 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($customers as $customer)
+            @foreach($customers as $i =>$customer)
                 <tr>
+                    <td>{{ $customers->firstItem() + $i }}</td>
                     <td><a href="{{ route('customers.show', $customer->id) }}">{{ $customer->name }}</a></td>
                     <td>{{ $customer->phone }}</td>
                     <td>{{ $customer->email }}</td>
@@ -36,5 +38,10 @@
             @endforeach
         </tbody>
     </table>
+
+    <!-- Tambahin navigasi pagination -->
+    <div class="d-flex justify-content-center mt-3">
+        {{ $customers->links() }}
+    </div>
 </div>
 @endsection

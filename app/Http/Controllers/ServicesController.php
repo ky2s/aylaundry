@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class ServicesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
      // Display a listing of the services
      public function index()
      {

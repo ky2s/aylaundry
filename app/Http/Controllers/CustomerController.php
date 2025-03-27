@@ -19,7 +19,9 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customers = Customer::orderBy('created_at', 'desc')->get();
+        $limit = config('app.pagination.limit');
+
+        $customers = Customer::orderBy('name', 'asc')->paginate($limit);
         return view('customers', compact('customers'));
     }
 

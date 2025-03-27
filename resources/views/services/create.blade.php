@@ -6,7 +6,8 @@
     <form action="{{ route('services.store') }}" method="POST">
         @csrf
         @include('services.form')
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary">Simpan</button>
+        <a href="{{ route('services.index') }}" class="btn btn-secondary">Kembali</a>
     </form>
 </div>
 @endsection
