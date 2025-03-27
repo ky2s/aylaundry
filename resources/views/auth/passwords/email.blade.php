@@ -1,44 +1,38 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100 px-3 pt-4">
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-4 text-center">
+                <h4 class="mb-3 fw-bold">Atur Ulang Kata Sandi</h4>
+                <p class="text-muted small">Masukkan email Anda untuk menerima tautan reset kata sandi</p>
+                
+                @if (session('status'))
+                    <div class="alert alert-success small" role="alert">
+                        {{ session('status') }}
+                    </div>
+                @endif
+                
+                <form method="POST" action="{{ route('password.email') }}">
+                    @csrf
+                    
+                    <div class="mb-2 text-start">
+                        <label for="email" class="form-label small">Alamat Email</label>
+                        <input id="email" type="email" class="form-control form-control-sm @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                        @error('email')
+                            <div class="invalid-feedback small">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-sm">Kirim Tautan Reset Kata Sandi</button>
+                    </div>
+                </form>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    <form method="POST" action="{{ route('password.email') }}">
-                        @csrf
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Send Password Reset Link') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                <div class="text-center mt-3 small">
+                    <span class="text-muted">Sudah punya akun?</span>
+                    <a class="text-decoration-none fw-bold" href="{{ route('login') }}">Masuk</a>
                 </div>
             </div>
         </div>
