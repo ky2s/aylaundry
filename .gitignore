@@ -17,3 +17,5 @@ yarn-error.log
 /.idea
 /.vscode
 database/migrations/
+database/factories/
+database/seeders/
