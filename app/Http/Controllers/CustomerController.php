@@ -17,11 +17,23 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $limit = config('app.pagination.limit');
+        
+        $query = Customer::query();
 
-        $customers = Customer::orderBy('name', 'asc')->paginate($limit);
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                ->orWhere('phone', 'like', "%$search%")
+                ->orWhere('email', 'like', "%$search%");
+            });
+        }
+
+        $customers = $query->orderBy('name', 'asc')->paginate($limit);
+        
         return view('customers', compact('customers'));
     }
 
@@ -87,14 +99,23 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        $request->validate([
+        $rules = [
             'name' => 'required|string|max:100',
-            'phone' => 'required|string|max:15|unique:customers,phone,' . $customer->id,
-            'email' => 'nullable|email|max:100|unique:customers,email,' . $customer->id,
             'address' => 'nullable|string',
-        ]);
-
-        $customer->update($request->all());
+        ];
+    
+        // Hanya tambahkan validasi unique jika email atau phone diubah
+        if ($request->input('phone') !== $customer->phone) {
+            $rules['phone'] = 'required|string|max:15|unique:customers,phone,' . $customer->id;
+        }
+    
+        if ($request->input('email') !== $customer->email) {
+            $rules['email'] = 'nullable|email|max:100|unique:customers,email,' . $customer->id;
+        }
+    
+        $validatedData = $request->validate($rules);
+    
+        $customer->update($validatedData);
         return redirect()->route('customers.index')->with('success', 'Customer berhasil diupdate!');
     }
 

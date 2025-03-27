@@ -15,16 +15,23 @@ class EmployeesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $limit = config('app.pagination.limit');
-        // Ambil semua user dengan role kasir
-        $kasirs = ModelsUser::where('role', 'employee')->paginate($limit);
+    
+        $query = ModelsUser::where('role', 'employee');
 
-        // Tampilkan kasir yang dihapus dengan pagination juga
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                ->orWhere('email', 'like', "%$search%");
+            });
+        }
+
+        $kasirs = $query->paginate($limit);
         $deletedKasirs = ModelsUser::onlyTrashed()->where('role', 'kasir')->paginate(10);
 
-        // Kirim data ke view
         return view('kasir.index', compact('kasirs','deletedKasirs'));
     }
 

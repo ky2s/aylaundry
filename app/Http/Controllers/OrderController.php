@@ -16,11 +16,19 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $limit = config('app.pagination.limit');
 
-        $orders = Order::orderBy('created_at', 'desc')->paginate($limit);
+        $search = $request->input('search');
+        
+        $orders = Order::when($search, function ($query, $search) {
+            return $query->whereHas('customer', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        })->paginate($limit);
+
+        // $orders = Order::orderBy('created_at', 'desc')->paginate($limit);
         return view('orders', compact('orders'));
     }
 

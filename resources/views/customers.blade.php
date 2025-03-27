@@ -3,7 +3,18 @@
 @section('content')
 <div class="container">
 <h1>Daftar Customer</h1>
-    <a href="{{ route('customers.create') }}" class="btn btn-primary mb-3">Tambah Customer</a>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <a href="{{ route('customers.create') }}" class="btn btn-primary mb-3">Tambah Customer</a>
+        </div>
+        <div class="col-md-6">
+            <form method="GET" action="{{ route('customers.index') }}" class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Cari nama, telepon atau email..." value="{{ request('search') }}">
+                <button type="submit" class="btn btn-secondary">Cari</button>
+            </form>
+        </div>
+    </div>
 
     @if(session('success'))
         <p style="color: green;">{{ session('success') }}</p>
@@ -20,7 +31,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($customers as $i =>$customer)
+            @forelse($customers as $i =>$customer)
                 <tr>
                     <td>{{ $customers->firstItem() + $i }}</td>
                     <td><a href="{{ route('customers.show', $customer->id) }}">{{ $customer->name }}</a></td>
@@ -35,7 +46,11 @@
                         </form>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center text-muted">Tidak ada data yang ditemukan.</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 

@@ -8,18 +8,6 @@ use App\Http\Controllers\ServicesController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-
 Auth::routes();
 
 // kasir
@@ -39,12 +27,14 @@ Route::get('/customers', [CustomerController::class, 'index'])->name('customers.
 Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
 Route::post('/customers/store', [CustomerController::class, 'store'])->name('customers.store');
 Route::get('/customers/edit/{customer}', [CustomerController::class, 'edit'])->name('customers.edit');
-Route::post('/customers/update', [CustomerController::class, 'update'])->name('customers.update');
+Route::post('/customers/update/{customer}', [CustomerController::class, 'update'])->name('customers.update');
 Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
 Route::post('/customers/destroy/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 Route::get('/customers_search', [CustomerController::class, 'search'])->name('customers.search');
 
+// orders
 Route::get('/', [App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
+Route::get('/home', [App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
 Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
 Route::post('/orders/store', [OrderController::class, 'store'])->name('orders.store');
 Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
